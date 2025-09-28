@@ -93,6 +93,9 @@ function parseDateSmart(s){
     if(mi!=null) return new Date(+m[3], mi, day);
   }
 
+  return null; // avoid native Date(string) (US-biased)
+}
+
   // Give up: avoid native Date(string) to prevent US-biased parsing
   return null;
 }
@@ -494,8 +497,13 @@ function importRulesFromFile(file) {
   reader.readAsText(file);
 }
 
-function escapeHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+function escapeHtml(s){
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
 }
 
 // UI wiring
