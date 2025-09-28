@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SpendLite V1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>SpendLite V1</h1>
+    <div class="header-actions"><a class="btn-adv" href="advanced.html" title="Advanced Mode">Advanced →</a></div>
+  </header>
+
+<main>
+  <section class="card">
+    <h2>1) Load Transactions (CSV)</h2>
+    <div class="app-controls">
+      <input type="file" id="csvFile" accept=".csv">
+
+      <div class="filters">
+        <label for="monthFilter">Filter by Month:</label>
+        <select id="monthFilter">
+          <option value="">All months</option>
+        </select>
+        <button id="clearMonthBtn" class="secondary small">Clear</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2) Category Totals <span id="monthBanner" class="muted"></span></h2>
+    <div class="btn-row app-controls">
+      <button id="exportTotalsBtn" class="secondary">Export totals (.txt)</button>
+    </div>
+
+    <div id="simpleTotalsWrapper">
+      <div id="monthTotals" class="month-totals muted"></div>
+      <div id="categoryTotals"></div>
+      <div id="totalsBar" class="muted" style="margin-top:8px;"></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <details id="rulesDetails">
+      <summary><h2 style="display:inline">3) Rules</h2></summary>
+
+      <p>Format: <code>KEYWORD =&gt; CATEGORY</code> (one per line, case-insensitive; first match wins)</p>
+
+      <div class="app-controls">
+        <div class="btn-row">
+          <button id="recalculateBtn">Recalculate</button>
+          <button id="exportRulesBtn" class="secondary">Export rules</button>
+          <button id="importRulesBtn" class="secondary">Import rules</button>
+          <input type="file" id="importRulesInput" accept=".txt,text/plain" style="display:none">
+        </div>
+        <textarea id="rulesBox" rows="10" cols="50" placeholder="e.g. COLES =&gt; GROCERIES"></textarea>
+      </div>
+    </details>
+  </section>
+
+  <section class="card">
+    <h2>4) Transactions <span id="activeFilter" class="muted"></span></h2>
+
+    <div class="btn-row app-controls">
+      <button id="txnsToggleBtn" class="secondary" onclick="toggleTransactions()">Show transactions</button>
+    </div>
+
+    <div id="transactionsBody">
+      <div class="btn-row app-controls">
+        <button id="clearFilterBtn" class="secondary" style="display:none">Show all</button>
+      </div>
+
+      <table id="transactionsTable" class="zebra"></table>
+      <div id="pager" class="pager"></div>
+    </div>
+
+    <p class="tip"><small>Tip: click a <b>category</b> above to filter, or click “+” to add a rule for that merchant.</small></p>
+  </section>
+</main>
+
+  <footer class="app-footer">Made with ♥ for bright, jolly spreadsheets</footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

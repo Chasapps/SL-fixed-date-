@@ -1,0 +1,293 @@
+:root{
+  --bg: #fff9fb;
+  --card: #ffffff;
+  --text: #222;
+  --muted: #666;
+  --primary: #ff4fb3;
+  --primary-2: #7a5cff;
+  --accent: #00c2ff;
+  --border: #ffd3e8;
+}
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;margin:0;background:var(--bg);color:var(--text)}
+.app-header{padding:24px 20px;background:linear-gradient(90deg,var(--primary),var(--primary-2));color:#fff}
+.app-header h1{margin:0;font-size:24px}
+main{padding:16px;max-width:1100px;margin:0 auto}
+.card{background:#fff;border:2px solid var(--border);border-radius:12px;padding:16px;margin:16px 0;box-shadow:0 6px 18px rgba(255,79,179,.08)}
+h2{margin:0 0 8px}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin: 8px 0 12px}
+button{background:var(--primary);color:#fff;border:none;border-radius:10px;padding:10px 14px;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(122,92,255,.25)}
+button.secondary{background:var(--accent)}
+button.small{padding:6px 10px;font-size:13px}
+button.rule-btn{padding:4px 10px;font-size:14px}
+textarea{width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;border-radius:10px;border:1px solid var(--border);padding:10px}
+table{border-collapse:collapse;width:100%;margin-top:10px}
+th,td{padding:10px;border-bottom:1px solid #eee;text-align:left}
+th{background:#faf7ff;border-bottom:2px solid var(--border)}
+#categoryTotals table td:nth-child(2),#transactionsTable td:nth-child(2){text-align:right}
+tfoot td{font-weight:700}
+.zebra tr:nth-child(even){background:#fff7fb}
+a.catlink{cursor:pointer;text-decoration:underline;color:var(--primary-2);font-weight:600}
+.muted{font-weight:normal;font-size:.9em;color:var(--muted);margin-left:8px}
+.filters{display:flex;align-items:center;gap:8px;margin-top:10px}
+select{padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:#fff}
+
+
+/* Month totals bar */
+.month-totals { margin: 8px 0 12px; font-weight: 600; }
+.month-totals .badge { display:inline-block; margin-left:6px; padding:2px 8px; border-radius:999px; background:#eef4ff; color:#223; font-weight:700; }
+
+
+/* === SpendLite tweak: Category Totals readability === */
+#categoryTotals table {
+  table-layout: auto;
+}
+/* First letter upper, rest lower for category names */
+#categoryTotals td:first-child,
+#categoryTotals td:first-child a {
+  text-transform: lowercase;
+}
+#categoryTotals td:first-child a::first-letter {
+  text-transform: uppercase;
+}
+/* Totals column: tighter gap and larger numbers */
+#categoryTotals td:last-child {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+  padding-left: 6px;
+  padding-right: 8px;
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+}
+/* Grand total emphasis */
+#categoryTotals tfoot td {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* Category totals table spacing and alignment */
+#categoryTotals table.cats th, #categoryTotals table.cats td {
+  padding: 6px 8px;
+}
+#categoryTotals table.cats td.num, #categoryTotals table.cats th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+#categoryTotals table.cats td:first-child {
+  white-space: nowrap;
+}
+.category-name {
+  text-transform: capitalize;
+}
+#transactionsBody { margin-top: 8px; }
+
+/* Tighter left gutter for tables */
+.zebra { margin-left: 0; }
+.zebra th, .zebra td { padding-left: 6px; }
+#categoryTotals table.cats th:first-child, 
+#categoryTotals table.cats td:first-child { padding-left: 6px; }
+
+/* --- Precise alignment for Category Totals --- */
+#categoryTotals table.cats {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+#categoryTotals table.cats .col-cat { width: auto; }
+#categoryTotals table.cats .col-total { width: 120px; }
+#categoryTotals table.cats .col-pct { width: 64px; }
+
+#categoryTotals table.cats th,
+#categoryTotals table.cats td {
+  padding: 6px 10px;
+  vertical-align: middle;
+}
+#categoryTotals table.cats th:first-child,
+#categoryTotals table.cats td:first-child {
+  padding-left: 8px; /* small but consistent */
+}
+#categoryTotals table.cats th.num,
+#categoryTotals table.cats td.num {
+  text-align: right;
+}
+/* Make the whole card's left gutter a touch tighter to bring columns left */
+section.card { padding-left: 10px; }
+
+
+/* Pager */
+.pager {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin: 8px 0 4px;
+  flex-wrap: wrap;
+}
+.pager button {
+  color: var(--text);
+  border: 1px solid rgba(0,0,0,.15);
+  background: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pager button[disabled] {
+  opacity: .4;
+  cursor: default;
+}
+.pager .page-btn.active {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+
+/* Improved pager buttons */
+.pager button {
+  color: var(--text);
+  min-width: 42px;
+  text-align: center;
+}
+.pager button:hover:not([disabled]) {
+  background: #f0f0f0;
+}
+.pager .page-btn.active {
+  font-weight: 700;
+  background: #ddd;
+}
+
+
+/* Advanced button */
+.header-actions { margin-top: 4px; }
+.header-actions .btn-adv {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,.15);
+  background: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+.header-actions .btn-adv:hover { background: #f5f5f5; }
+
+
+/* === Simple Mode tightening v2 === */
+#simpleTotalsWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  text-align: center;
+}
+#categoryTotals table.cats {
+  border-collapse: collapse !important;
+  table-layout: auto !important;
+  width: auto !important;          /* shrink to content so columns sit closer */
+  margin: 0 auto !important;
+  border-spacing: 0 !important;
+}
+#categoryTotals table.cats col.col-cat { width: auto !important; }
+#categoryTotals table.cats col.col-total { width: 1% !important; } /* minimal width */
+#categoryTotals table.cats col.col-pct { width: 1% !important; }
+
+#categoryTotals table.cats th,
+#categoryTotals table.cats td {
+  padding: 4px 8px !important; /* tighter cells */
+  white-space: nowrap;
+}
+#categoryTotals table.cats td:nth-child(2),
+#categoryTotals table.cats th:nth-child(2) { text-align: right; }
+#categoryTotals table.cats td:nth-child(3),
+#categoryTotals table.cats th:nth-child(3) { text-align: right; }
+
+/* Ensure the block remains centered */
+#categoryTotals { display: block; margin: 6px 0; }
+
+#categoryTotals table.cats td:nth-child(1), #categoryTotals table.cats th:nth-child(1) { text-align: left; }
+
+details#rulesDetails summary { cursor: pointer; }
+
+
+/* Force Category Totals fully left-aligned */
+#categoryTotals { display: block !important; margin: 6px 0 !important; text-align: left !important; }
+#categoryTotals table.cats { margin-left: 0 !important; margin-right: 0 !important; width: auto; }
+#categoryTotals table.cats th:first-child,
+#categoryTotals table.cats td:first-child { text-align: left !important; }
+#categoryTotals a.catlink { display: inline !important; text-align: left !important; }
+#categoryTotals .num { text-align: right !important; } /* keep numeric columns right-aligned */
+
+
+/* Flush-left Category Totals block (not centered) */
+#categoryTotals { 
+  display: block !important; 
+  margin-left: 0 !important; 
+  margin-right: 0 !important; 
+  text-align: left !important; 
+}
+#categoryTotals table.cats { 
+  margin-left: 0 !important; 
+  margin-right: 0 !important; 
+  width: auto !important; 
+}
+#categoryTotals table.cats th:first-child,
+#categoryTotals table.cats td:first-child {
+  text-align: left !important;
+}
+#categoryTotals .num {
+  text-align: right !important;
+}
+
+
+/* Force Category Totals flush-left while keeping numeric alignment */
+#categoryTotals { display: block !important; margin: 6px 0 !important; text-align: left !important; }
+#categoryTotals table.cats { margin-left: 0 !important; margin-right: 0 !important; }
+#categoryTotals table.cats th:first-child,
+#categoryTotals table.cats td:first-child { text-align: left !important; }
+#categoryTotals .num { text-align: right !important; }
+/* === Bigger Buttons, Dropdown, and File Inputs === */
+.app-controls {
+  font-size: 1.2rem;   /* scales everything inside */
+}
+
+/* Enlarge all buttons */
+button {
+  padding: 16px 24px;
+  font-size: 1.2rem;
+  border-radius: 12px;
+}
+
+/* Larger month dropdown */
+select {
+  padding: 12px 20px;
+  font-size: 1.5rem;
+  border-radius: 10px;
+}
+
+/* Larger CSV file selector */
+input[type="file"] {
+  font-size: 1.5rem;
+  padding: 12px;
+  border-radius: 16px;
+}
+
+/* Extra spacing for grouped controls */
+.app-controls .btn-row,
+.app-controls .filters {
+  gap: 12px;
+}
+/* Make only the clickable "Choose File" button bigger */
+input[type="file"]::file-selector-button {
+  padding: 12px 18px;     /* Button padding */
+  font-size: 1.8rem;      /* Text size of the button */
+  border-radius: 16px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Optional: hover effect for better feedback */
+input[type="file"]::file-selector-button:hover {
+  background: var(--primary-2);
+}
