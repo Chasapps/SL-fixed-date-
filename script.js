@@ -1,7 +1,7 @@
-// SpendLite v6.6.28 — header-aware CSV loader + strict DD/MM/YYYY parsing + bugfixes
-// - Auto-detects headers (Debit amount/Credit amount/Effective date/Long description, etc.)
+// SpendLite v6.6.28 — header-aware CSV loader (IGNORE CREDITS) + strict DD/MM/YYYY parsing
+// - Auto-detects headers (Debit amount/Effective date/Long description, etc.)
+// - Ignores credits entirely: only rows with a positive Debit are imported
 // - Works with 10+ columns; no strict length requirement
-// - Amount = Debit - Credit (debits positive, credits negative)
 // - Forces D/M/Y for slash/dash dates (01/12/2024 -> 1 Dec 2024)
 // - Keeps previous UI, category picker, paging, exports
 
@@ -69,7 +69,7 @@ function parseDateSmart(s){
 function yyyymm(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`; }
 function getFirstTxnMonth(txns=CURRENT_TXNS){ if(!txns.length) return null; const d=parseDateSmart(txns[0].date); if(!d||isNaN(d)) return null; return yyyymm(d); }
 
-/* ---------------- Header-aware CSV Loader ---------------- */
+/* ---------------- Header-aware CSV Loader (IGNORE CREDITS) ---------------- */
 function basicCsvParse(text){
   const out=[]; const lines=String(text||'').split(/\r?\n/);
   for(const raw of lines){
@@ -109,7 +109,7 @@ function mapHeaders(headerRow){
   const idx = {
     effectiveDate: pick('effective date','eff date','date','value date','posted date'),
     debit:         pick('debit amount','debit'),
-    credit:        pick('credit amount','credit'),
+    // credit intentionally not used (ignored)
     longdesc:      pick('long description','long desc','description','details','narrative')
   };
   return idx;
@@ -126,7 +126,7 @@ function loadCsvText(csvText){
   const startIdx = headerLike ? 1 : 0;
   const headerRow = headerLike ? rows[0] : [];
 
-  let H = headerLike ? mapHeaders(headerRow) : { effectiveDate:2, debit:5, credit:-1, longdesc:9 };
+  let H = headerLike ? mapHeaders(headerRow) : { effectiveDate:2, debit:5, longdesc:9 };
 
   const txns = [];
   for(let i=startIdx; i<rows.length; i++){
@@ -135,16 +135,18 @@ function loadCsvText(csvText){
 
     const dateRaw = H.effectiveDate>=0 ? (r[H.effectiveDate]||'') : (r[2]||'');
     const debitRaw = H.debit>=0 ? (r[H.debit]||'') : (r[5]||'');
-    const creditRaw = H.credit>=0 ? (r[H.credit]||'') : '';
     const descRaw = H.longdesc>=0 ? (r[H.longdesc]||'') : (r[9]||r[r.length-1]||'');
 
     const debit = parseAmount(debitRaw);
-    const credit = parseAmount(creditRaw);
-    const amount = (debit || 0) - (credit || 0); // debits positive, credits negative
+
+    // IGNORE CREDITS: only accept rows with a positive debit
+    if(!(Number.isFinite(debit) && debit > 0)){
+      continue;
+    }
 
     const longDesc = String(descRaw||'').trim();
-    if((dateRaw || longDesc) && Number.isFinite(amount) && amount !== 0){
-      txns.push({ date: String(dateRaw||''), amount, description: longDesc });
+    if(dateRaw || longDesc){
+      txns.push({ date: String(dateRaw||''), amount: debit, description: longDesc });
     }
   }
 
@@ -461,7 +463,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
   // Restore rules + state
   (async ()=>{
     let restored=false;
-    try{ const saved=localStorage.getItem(LS_KEYS.RULES); if(saved && saved.trim()){ const box=document.getElementById('rulesBox'); if(box) box.value=saved; restored=true; } }catch{}
+    try{ const saved=localStorage.getItem(LS_KEYS.RULES); if(saved and saved.trim()){ const box=document.getElementById('rulesBox'); if(box) box.value=saved; restored=true; } }catch{}
     if(!restored){ try{ const res=await fetch('rules.txt'); const text=await res.text(); const box=document.getElementById('rulesBox'); if(box) box.value=text; restored=true; }catch{} }
     if(!restored){ const box=document.getElementById('rulesBox'); if(box) box.value = `# Rules format: KEYWORD => CATEGORY\n`; }
     try{ const savedFilter=localStorage.getItem(LS_KEYS.FILTER); CURRENT_FILTER=savedFilter && savedFilter.trim() ? savedFilter.toUpperCase() : null; }catch{}
